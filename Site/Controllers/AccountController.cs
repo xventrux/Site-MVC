@@ -9,7 +9,7 @@ namespace Site.Controllers
     public class AccountController : Controller
     {
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl = null)
         {
             return View();
         }
