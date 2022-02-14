@@ -1,9 +1,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Site.DataAccess;
+using Site.Infrastructure.Repository;
+using Site.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +28,17 @@ namespace Site
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Регистрация базы данных
+            services.AddDbContext<BaseDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<DbContext>(s => s.GetRequiredService<BaseDbContext>());
+
+            // Регистрация репозитория
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+            // Регистрация сервиса для работы с Identity
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<BaseDbContext>().AddDefaultTokenProviders();
+
+
             services.AddControllersWithViews();
         }
 
