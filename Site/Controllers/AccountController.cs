@@ -38,7 +38,7 @@ namespace Site.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email };
+                User user = new User { Email = model.Email, UserName = model.Email };
 
                 // добавляем пользователя
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -47,11 +47,6 @@ namespace Site.Controllers
                 {
                     // установка куки
                     await _signInManager.SignInAsync(user, false);
-
-                    if(!String.IsNullOrEmpty(model.ReturnUrl))
-                    {
-                        return RedirectToRoute(model.ReturnUrl);
-                    }
                     return RedirectToAction("Index", "Home");
                 }
                 else
