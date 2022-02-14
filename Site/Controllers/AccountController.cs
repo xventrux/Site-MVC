@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Site.ViewModels.Account;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,9 @@ namespace Site.Controllers
         }
 
         [HttpGet]
-        public IActionResult Registration()
+        public IActionResult Registration(string returnUrl = null)
         {
-            return View();
+            return View(new RegistrationViewModel() { ReturnUrl = returnUrl });
         }
     }
 }
