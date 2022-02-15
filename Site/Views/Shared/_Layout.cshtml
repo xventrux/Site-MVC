@@ -26,19 +26,33 @@
                         </li>
                     </ul>
 
-                    @if (!User.Identity.IsAuthenticated)
+                    @if (User.Identity.IsAuthenticated)
                     {
-                        <a class="nav-link text-dark mr-3" asp-area="" asp-controller="Account" asp-action="Registration">Зарегистрироваться</a>
-                        <a class="btn btn-light" asp-area="" asp-controller="Account" asp-action="Login">Войти</a>
+                        <div class="dropdown">
+                            <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                @User.Identity.Name
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarDarkDropdownMenuLink">
+                                <li><a asp-controller="Account" asp-action="Index" class="dropdown-item">Личный кабинет</a></li>
+                                @if (User.IsInRole("admin"))
+                                {
+                                    <li><a asp-controller="Admin" asp-action="Index" class="dropdown-item">Админ панель</a></li>
+                                }
+
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="post" asp-controller="Account" asp-action="Logout">
+                                        <button type="submit" class="dropdown-item">Выйти</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+
                     }
                     else
                     {
-                        <div class="d-flex">
-                            <a class="nav-link text-dark mr-3" href="#">@User.Identity.Name</a>
-                            <form method="post" asp-controller="Account" asp-action="Logout">
-                                <button class="btn btn-light" type="submit">Выйти</button>
-                            </form>
-                        </div>
+                        <a asp-controller="Account" asp-action="Registration" class="nav-link text-dark">Зарегистрироваться</a>
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-light">Войти</a>
                     }
                 </div>
             </div>

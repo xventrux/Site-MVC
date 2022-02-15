@@ -21,12 +21,31 @@ namespace Site.Controllers
             _signInManager = signInManager;
         }
 
+        #region Логин
         [HttpGet]
         public IActionResult Login(string returnUrl = null)
         {
-            return View();
+            return View(new LoginViewModel() { ReturnUrl = returnUrl });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Неправильный логин и (или) пароль");
+                }
+            }
+            return View(model);
+        }
+        #endregion
 
         #region Регистрация
         [HttpGet]
@@ -61,6 +80,17 @@ namespace Site.Controllers
             }
             return View(model);
         }
+        #endregion
+
+        #region Выход
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            // удаляем аутентификационные куки
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
         #endregion
     }
 }
