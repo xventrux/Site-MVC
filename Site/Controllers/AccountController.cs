@@ -27,6 +27,8 @@ namespace Site.Controllers
             return View();
         }
 
+
+        #region Регистрация
         [HttpGet]
         public IActionResult Registration(string returnUrl = null)
         {
@@ -59,5 +61,6 @@ namespace Site.Controllers
             }
             return View(model);
         }
+        #endregion
     }
 }

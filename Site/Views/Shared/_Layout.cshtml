@@ -28,7 +28,8 @@
 
                     @if (!User.Identity.IsAuthenticated)
                     {
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Registration">Зарегистрироваться</a>
+                        <a class="nav-link text-dark mr-3" asp-area="" asp-controller="Account" asp-action="Registration">Зарегистрироваться</a>
+                        <a class="btn btn-light" asp-area="" asp-controller="Account" asp-action="Login">Войти</a>
                     }
                     else
                     {
