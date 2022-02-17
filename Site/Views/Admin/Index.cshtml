@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Админ панель";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+
+
+    });
+
+</script>
+
+<h2>Админ панель</h2>
+
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-users-tab" data-bs-toggle="tab" data-bs-target="#nav-users" type="button" role="tab" aria-controls="nav-users" aria-selected="true">Пользователи</button>
+        <button class="nav-link" id="nav-roles-tab" data-bs-toggle="tab" data-bs-target="#nav-roles" type="button" role="tab" aria-controls="nav-roles" aria-selected="false">Роли</button>
+    </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+
+    <div class="tab-pane fade show active" id="nav-users" role="tabpanel" aria-labelledby="nav-users-tab">
+
+        <div class="mb-3" style="margin-top:10px">
+
+            <div class="d-flex mb-3 sticky-top" style="background-color:white">
+                <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search" id="searchField">
+                <button class="btn btn-outline-success" id="searchButton">Искать</button>
+            </div>
+
+        </div>
+
+        <span id="users"></span>
+
+        <table class="table table-hover align-middle" >
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="tab-pane fade" id="nav-roles" role="tabpanel" aria-labelledby="nav-roles-tab">
+
+        <div class="mb-3" style="margin-top:10px">
+
+            <form>
+                <div class="d-flex">
+                    <input class="form-control me-2" type="text" placeholder="Название роли" style="width:240px">
+                    <button class="btn btn-primary">Добавить</button>
+                </div>
+            </form>
+
+        </div>
+
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Название</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>admin</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>none</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
