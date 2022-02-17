@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Личный кабинет";
+}
+@using Site.ViewModels.Account;
+@model CabinetViewModel;  
+
+<h2>Личный кабинет</h2> 
+
+<div class="d-flex align-items-start justify-content-between">
+    <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Личные данные</button>
+        <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Безопасность</button>
+    </div>
+    <div class="tab-content" id="v-pills-tabContent" style="margin-left:-150px">
+
+        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+            @*<h5>Email</h5>
+            <h6>@Model.Email</h6>*@
+
+            <div class="mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <label class="form-label">Email</label>
+                        <input disabled readonly class="form-control" value="@Model.Email">
+                    </div>
+                </div>
+                
+            </div>
+
+        </div>
+
+        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+            <form method="post" asp-controller="Account" asp-action="ChangePassword">
+                <div asp-validation-summary="ModelOnly"></div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="OldPassword" class="form-label"></label>
+                            <input asp-for="OldPassword" type="password" class="form-control">
+                            <span asp-validation-for="OldPassword"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input asp-for="Password" type="password" class="form-control">
+                            <span asp-validation-for="Password"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="PasswordConfirm" class="form-label"></label>
+                            <input asp-for="PasswordConfirm" type="password" class="form-control">
+                            <span asp-validation-for="PasswordConfirm"></span>
+                        </div>
+
+                        <button class="btn btn-primary" type="submit">Изменить пароль</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div></div>
+</div>

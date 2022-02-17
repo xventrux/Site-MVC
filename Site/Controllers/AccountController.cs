@@ -21,6 +21,40 @@ namespace Site.Controllers
             _signInManager = signInManager;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            User user = await _userManager.GetUserAsync(User);
+            return View(new CabinetViewModel() { Email = user.Email });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(CabinetViewModel model)
+        {
+            User user = await _userManager.GetUserAsync(User);
+            if (ModelState.IsValid)
+            {
+                
+
+                // добавляем пользователя
+                var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.Password);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+            model.Email = user.Email;
+            return View(model);
+        }
+
         #region Логин
         [HttpGet]
         public IActionResult Login(string returnUrl = null)
