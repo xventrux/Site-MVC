@@ -6,10 +6,10 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarDarkDropdownMenuLink">
             <li><a asp-controller="Account" asp-action="Index" class="dropdown-item">Личный кабинет</a></li>
-            @if (User.IsInRole("admin"))
-            {
+            @*@if (User.IsInRole("admin"))*@
+            @* } *@
                 <li><a asp-controller="Admin" asp-action="Index" class="dropdown-item">Админ панель</a></li>
-            }
+            @* } *@
 
             <li><hr class="dropdown-divider"></li>
             <li>

@@ -1,0 +1,156 @@
+﻿<div class="mb-3 sticky-top" style="background-color: white; margin-top:10px">
+
+    <div class="d-flex mb-3">
+        <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search" id="searchField">
+        <button class="btn btn-outline-success" onclick="updateUsers()">Искать</button>
+    </div>
+
+    <div id="checkRoles" class="d-flex">
+        <p class="placeholder-wave" style="width:240px">
+            <span class="placeholder col-12 bg-primary"></span>
+        </p>
+    </div>
+
+</div>
+
+<table class="table table-hover align-middle">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Email</th>
+            <th scope="col">Роль</th>
+            <th scope="col"></th>
+            <th scope="col">Удалить</th>
+        </tr>
+    </thead>
+    <tbody id="users">
+        <tr>
+            <th scope="row">
+                <p class="placeholder-wave">
+                    <span class="placeholder col-12"></span>
+                </p>
+            </th>
+            <td>
+                <p class="placeholder-wave">
+                    <span class="placeholder col-12"></span>
+                </p>
+            </td>
+            <td colspan="3">
+                <p class="placeholder-wave">
+                    <span class="placeholder col-12"></span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                <p class="placeholder-wave">
+                    <span class="placeholder col-12"></span>
+                </p>
+            </th>
+            <td>
+                <p class="placeholder-wave">
+                    <span class="placeholder col-12"></span>
+                </p>
+            </td>
+            <td colspan="3">
+                <p class="placeholder-wave">
+                    <span class="placeholder col-12"></span>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="position-fixed bottom-0 end-0 p-3" id="messages" style="z-index: 11">
+</div>
+
+<script>
+
+    updateUsers();
+
+    function saveRole(_id) {
+        let elId = 'selectedRole' + _id;
+        let selectedRole = document.getElementById(elId).value;
+
+        $.ajax({
+            type: 'POST',
+            url: 'Admin/ChangeRole/',
+            data: { id: _id, name: selectedRole },
+            success: function (message) {
+                var s = "<div id='liveToast' class='toast' role='alert' aria-live='assertive' aria-atomic='true'>";
+                s += "<div class='d-flex'>";
+                s += "<div class='toast-body'>";
+                s += message;
+                s += "</div>";
+                s += "<button type='button' class='btn-close me-2 m-auto' data-bs-dismiss='toast' aria-label='Close'></button>"
+                s += "</div>";
+                s += "</div>";
+                $("#messages").html(s);
+
+                var toastLiveExample = document.getElementById('liveToast')
+                var toast = new bootstrap.Toast(toastLiveExample)
+                toast.show();
+            }
+        });
+    }
+
+    function updateUsers() {
+        console.log('update');
+        let str = document.getElementById("searchField").value;
+
+        $.ajax({
+            type: 'GET',
+            url: 'Admin/GetUsers',
+            data: { search: str },
+            success: function (model) {
+
+                var users = model.listOfUsers;
+                var roles = model.listOfRoles;
+
+                var s = "";
+                var c = "";
+
+                for (let i = 0; i < roles.length; i++) {
+                    c += "<div class='form-check me-3'>";
+                    c += "<input id='check-" + roles[i] + "' class='form-check-input' type='checkbox' value='' id='flexCheckChecked' checked>";
+                    c += "<label class='form-check-label'>" + roles[i] + "</label>";
+                    c += "</div>";
+                }
+                $("#checkRoles").html(c);
+                
+                for (let i = 0; i < users.length; i++) {
+                    s += "<tr>";
+                    s += "<th scope='row'>" + (i + 1) + "</th>";
+                    s += "<td>" + users[i].email + "</td>";
+                    s += "<td>";
+
+                    if (roles.length == 0) {
+                        s += "<select id='selectedRole' class='form-select' aria-label='Default select' disabled>";
+                        s += "<option>Нет ролей</option>";
+                        s += "</select>";
+                    } else {
+                        s += "<select id='selectedRole" + users[i].id + "' class='form-select' aria-label='Default select'>";
+
+                        for (let j = 0; j < roles.length; j++) {
+                            s += "<option>" + roles[j] + "</option>";
+                        }
+
+                        s += "</select>";
+                    }
+
+                    s += "</td>";
+                    if (roles.length != 0)
+                        s += "<td><div><button onclick='saveRole(`" + users[i].id + "`)' class='btn btn-light'>Сохранить</button>";
+                    else
+                        s += "<td><div><button disabled class='btn btn-light'>Сохранить</button>";
+
+                    s += "<td><button class='btn btn-danger'>Удалить</button></td>";
+                    s += "</tr>";
+                }
+                $("#users").html(s);
+            }
+        });
+    }
+
+
+</script>
