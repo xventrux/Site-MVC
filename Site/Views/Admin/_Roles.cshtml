@@ -10,9 +10,9 @@
 <table class="table table-hover align-middle">
     <thead>
         <tr>
-            <th>#</th>
-            <th>Название</th>
-            <th>Удалить</th>
+            <th scope="col">#</th>
+            <th scope="col">Название</th>
+            <th scope="col">Удалить</th>
         </tr>
     </thead>
     <tbody id="roles">
@@ -83,7 +83,7 @@
                 for (let i = 0; i < roles.length; i++) {
 
                     s += "<tr>";
-                    s += "<th>" + (i + 1) + "</th>";
+                    s += "<th scope='row'>" + (i + 1) + "</th>";
                     s += "<td>" + roles[i] + "</td>";
                     s += "<td><a href='#' class='btn btn-danger' data-bs-toggle='modal' data-bs-target='#" + roles[i] + "'>" +
                         "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-archive' viewBox='0 0 16 16'>" +
