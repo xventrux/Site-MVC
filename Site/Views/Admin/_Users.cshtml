@@ -7,8 +7,6 @@
 
 </div>
 
-<span id="users"></span>
-
 <table class="table table-hover align-middle">
     <thead>
         <tr>
@@ -18,36 +16,70 @@
             <th scope="col"></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="users">
         <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
+            <th scope="row">
+                <p class="placeholder-wave">
+                    <span class="placeholder col-12"></span>
+                </p>
+            </th>
             <td>
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
+                <p class="placeholder-wave">
+                    <span class="placeholder col-12"></span>
+                </p>
             </td>
-            <td>
-                <button class="btn btn-light">Сохранить</button>
+            <td colspan="2">
+                <p class="placeholder-wave">
+                    <span class="placeholder col-12"></span>
+                </p>
             </td>
         </tr>
         <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
+            <th scope="row">
+                <p class="placeholder-wave">
+                    <span class="placeholder col-12"></span>
+                </p>
+            </th>
             <td>
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
+                <p class="placeholder-wave">
+                    <span class="placeholder col-12"></span>
+                </p>
             </td>
-            <td>
-                <button class="btn btn-light">Сохранить</button>
+            <td colspan="2">
+                <p class="placeholder-wave">
+                    <span class="placeholder col-12"></span>
+                </p>
             </td>
         </tr>
     </tbody>
 </table>
+
+<script>
+    updateUsers();
+
+    function updateUsers() {
+        $.ajax({
+            type: 'GET',
+            url: 'Admin/GetUsers',
+            success: function (users) {
+                var s = "";
+
+                for (let i = 0; i < users.length; i++) {
+                    s += "<tr>";
+                    s += "<th scope='row'>" + (i + 1) + "</th>";
+                    s += "<td>" + users[i].email + "</td>";
+                    s += "<td>";
+                    s += "<select class='form-select' aria-label='Default select'>";
+                    s += "<option selected>none</option>";
+                    s += "<option>admin</option>";
+                    s += "</select>";
+                    s += "</td>";
+                    s += "<td><button class='btn btn-light'>Сохранить</button></td>";
+                    s += "</tr>";
+                }
+                $("#users").html(s);
+            }
+        });
+    }
+
+</script>

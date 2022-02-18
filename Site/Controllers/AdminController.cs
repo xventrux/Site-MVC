@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Site.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,13 @@ namespace Site.Controllers
     public class AdminController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<User> _userManager;
 
-        public AdminController(RoleManager<IdentityRole> roleManager)
+        public AdminController(RoleManager<IdentityRole> roleManager, 
+            UserManager<User> userManager)
         {
             _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -21,6 +25,7 @@ namespace Site.Controllers
             return View();
         }
 
+        #region Роли
         [HttpPost]
         public async Task<IActionResult> AddRoleAsync(string name)
         {
@@ -51,6 +56,15 @@ namespace Site.Controllers
                 await _roleManager.DeleteAsync(role);
 
             return Ok();
+        }
+        #endregion
+
+        [HttpGet]
+        public async Task<IActionResult> GetUsers()
+        {
+            List<User> list = _userManager.Users.ToList();
+
+            return new JsonResult(list);
         }
     }
 }
