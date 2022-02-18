@@ -4,54 +4,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-<script>
 
-    $(document).ready(function () {
-
-        updateRoles();
-
-        $('#roleAddBtn').click(function () {
-            roleName = document.getElementById('roleNameInp').value;
-            addRole(roleName);
-        });
-
-        function addRole(_name) {
-            $.ajax({
-                type: 'POST',
-                url: "Admin/AddRole/",
-                data: { name: _name },
-                success: function () {
-                    updateRoles();
-                }
-            });
-        }
-
-        function updateRoles() {
-            $.ajax({
-                type: 'GET',
-                url: "Admin/GetRoles/",
-                success: function (roles) {
-                    var s = "";
-                    for (let i = 0; i < roles.length; i++) {
-
-                        s += "<tr>";
-                        s += "<th>" + (i + 1) + "</th>";
-                        s += "<td>" + roles[i] + "</td>";
-                        s += "<td><a href='#' class='btn btn-danger'>" +
-                                "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-archive' viewBox='0 0 16 16'>" +
-                                    "<path d='M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1V2zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5H2zm13-3H1v2h14V2zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z' />" +
-                                "</svg>" +
-                                "</a></td>";
-                        s += "</tr>";
-                    }
-                    $("#roles").html(s);
-                }
-            });
-        }
-
-    });
-
-</script>
 
 <h2>Админ панель</h2>
 
@@ -133,5 +86,94 @@
 
         </table>
 
+        <div id="removeRoleModals">
+
+        </div>
+
     </div>
 </div>
+
+
+<script>
+
+    updateRoles();
+
+    function removeRole(_name) {
+        $.ajax({
+            type: 'POST',
+            url: "Admin/RemoveRole",
+            data: { name: _name },
+            success: function() {
+                updateRoles();
+            }
+        });
+        
+    }
+
+    function addRole() {
+        console.log('add');
+        let roleName = document.getElementById('roleNameInp');
+        let str = roleName.value;
+        $.ajax({
+            type: 'POST',
+            url: "Admin/AddRole/",
+            data: { name: str },
+            success: function () {
+                updateRoles();
+                roleName.value = "";
+            }
+        });
+    }
+
+    var roleAddBtn = document.getElementById('roleAddBtn');
+    if (roleAddBtn) {
+        roleAddBtn.addEventListener("click", addRole);
+    }
+
+
+    function updateRoles() {
+        $.ajax({
+            type: 'GET',
+            url: "Admin/GetRoles/",
+            success: function (roles) {
+                var s = "";
+                var r = "";
+                for (let i = 0; i < roles.length; i++) {
+
+                    s += "<tr>";
+                    s += "<th>" + (i + 1) + "</th>";
+                    s += "<td>" + roles[i] + "</td>";
+                    s += "<td><a href='#' class='btn btn-danger' data-bs-toggle='modal' data-bs-target='#" + roles[i] + "'>" +
+                        "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-archive' viewBox='0 0 16 16'>" +
+                        "<path d='M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1V2zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5H2zm13-3H1v2h14V2zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z' />" +
+                        "</svg>" +
+                        "</a></td>";
+                    s += "</tr>";
+
+                    r += "<div class='modal fade' id='" + roles[i] + "' tabindex='-1' aria-labelledby='" + roles[i] + "Label' aria-hidden='true'>";
+
+                    r += "<div class='modal-dialog'>";
+                    r += "<div class='modal-content'>";
+                    r += "<div class='modal-header'>";
+                    r += "<h5 class='modal-title' id='" + roles[i] + "Label'>Удалить роль?</h5>";
+                    r += "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
+                    r += "</div>"
+                    r += "<div class='modal-body'>";
+                    r += "Вы действительно хотите удалить роль " + roles[i] + "?";
+                    r += "</div>"
+                    r += "<div class='modal-footer'>";
+                    r += "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Закрыть</button>";
+                    r += "<button type='button' onclick='removeRole(`" + roles[i] + "`)' class='btn btn-danger' data-bs-dismiss='modal'>Удалить</button>";
+                    r += "</div>"
+                    r += "</div>"
+                    r += "</div>"
+
+                    r += "</div>"
+                }
+                $("#roles").html(s);
+                $("#removeRoleModals").html(r);
+            }
+        });
+    }
+
+</script>

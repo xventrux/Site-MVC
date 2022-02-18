@@ -42,5 +42,15 @@ namespace Site.Controllers
 
             return new JsonResult(roles);
         }
+
+        public async Task<IActionResult> RemoveRole(string name)
+        {
+            var role = _roleManager.Roles.Where(r => r.Name == name).FirstOrDefault();
+
+            if(role != null)
+                await _roleManager.DeleteAsync(role);
+
+            return Ok();
+        }
     }
 }
