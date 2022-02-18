@@ -47,13 +47,13 @@
             data: { name: _name },
             success: function() {
                 updateRoles();
+                updateUsers();
             }
         });
 
     }
 
     function addRole() {
-        console.log('add');
         let roleName = document.getElementById('roleNameInp');
         let str = roleName.value;
         $.ajax({
@@ -62,6 +62,7 @@
             data: { name: str },
             success: function () {
                 updateRoles();
+                updateUsers();
                 roleName.value = "";
             }
         });
