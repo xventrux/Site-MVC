@@ -61,10 +61,9 @@ namespace Site.Controllers
         #endregion
 
         [HttpGet]
-        public async Task<IActionResult> GetUsers(string search, object _roles)
+        public async Task<IActionResult> GetUsers(string search, string[] _roles)
         {
-
-            List<User> users = await SearchUsers(_userManager.Users, search, (string[])_roles);
+            List<User> users = await SearchUsers(_userManager.Users, search, _roles);
 
             List<string> roles = new List<string>();
 

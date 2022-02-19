@@ -130,6 +130,7 @@
 
         $.ajax({
             type: 'GET',
+            traditional: true,
             url: 'Admin/GetUsers',
             data: { search: str, _roles: checkRoles },
             success: function (model) {
