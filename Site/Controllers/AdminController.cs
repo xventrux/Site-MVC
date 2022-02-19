@@ -63,8 +63,7 @@ namespace Site.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers(string search, string[] _roles)
         {
-
-            List<User> users = SearchUsers(_userManager.Users, search);
+            List<User> users = await SearchUsers(_userManager.Users, search, _roles);
 
             List<string> roles = new List<string>();
 
@@ -79,7 +78,7 @@ namespace Site.Controllers
             return new JsonResult(new UsersTableViewModel { ListOfUsers = users, ListOfRoles = roles });
         }
 
-        public List<User> SearchUsers(IQueryable<User> users, string str, string[] roles = null)
+        public async Task<List<User>> SearchUsers(IQueryable<User> users, string str, string[] roles)
         {
             List<User> list = new List<User>();
 
@@ -92,6 +91,28 @@ namespace Site.Controllers
             {
                 list = users.Where(u => u.Email.ToLower().Contains(str.ToLower()) || str.ToLower().Contains(u.Email.ToLower())).ToList();
             }
+
+            for(int i = 0; i < list.Count; i++)
+            {
+                bool cond = false;
+
+                foreach (string item in roles)
+                {
+                    if(await _userManager.IsInRoleAsync(list[i], item))
+                    {
+                        cond = true;
+                        break;
+                    }
+                }
+
+                if(!cond)
+                {
+                    list.RemoveAt(i);
+                    i--;
+                }
+            }
+            
+            
 
             return list;
         }
