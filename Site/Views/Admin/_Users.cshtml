@@ -64,6 +64,10 @@
 <div class="position-fixed bottom-0 end-0 p-3" id="messages" style="z-index: 11">
 </div>
 
+<div id="removeUserModals">
+
+</div>
+
 <script>
     updateRolesToUsers();
     var allRoles = [];
@@ -115,6 +119,17 @@
         });
     }
 
+    function removeUser(_id) {
+        $.ajax({
+            type: 'POST',
+            url: "Admin/RemoveUser",
+            data: { id: _id },
+            success: function () {
+                updateUsers();
+            }
+        });
+    }
+
     function updateUsers() {
         let str = document.getElementById("searchField").value;
         let checkRoles = [];
@@ -139,11 +154,12 @@
                 var roles = model.listOfRoles;
 
                 var s = "";
+                var r = "";
                 
                 for (let i = 0; i < users.length; i++) {
                     s += "<tr>";
                     s += "<th scope='row'>" + (i + 1) + "</th>";
-                    s += "<td>" + users[i].email + "</td>";
+                    s += "<td>" + users[i].user.email + "</td>";
                     s += "<td>";
 
                     if (roles.length == 0) {
@@ -151,10 +167,15 @@
                         s += "<option>Нет ролей</option>";
                         s += "</select>";
                     } else {
-                        s += "<select id='selectedRole" + users[i].id + "' class='form-select' aria-label='Default select'>";
+                        s += "<select id='selectedRole" + users[i].user.id + "' class='form-select' aria-label='Default select'>";
 
                         for (let j = 0; j < roles.length; j++) {
-                            s += "<option>" + roles[j] + "</option>";
+                            if (users[i].role == roles[j]) {
+                                s += "<option selected>" + roles[j] + "</option>";
+                            } else {
+                                s += "<option>" + roles[j] + "</option>";
+                            }
+                            
                         }
 
                         s += "</select>";
@@ -162,14 +183,35 @@
 
                     s += "</td>";
                     if (roles.length != 0)
-                        s += "<td><div><button onclick='saveRole(`" + users[i].id + "`)' class='btn btn-light'>Сохранить</button>";
+                        s += "<td><div><button onclick='saveRole(`" + users[i].user.id + "`)' class='btn btn-light'>Сохранить</button>";
                     else
                         s += "<td><div><button disabled class='btn btn-light'>Сохранить</button>";
 
-                    s += "<td><button class='btn btn-danger'>Удалить</button></td>";
+                    s += "<td><button class='btn btn-danger' data-bs-toggle='modal' data-bs-target='#" + users[i].user.id + "'>Удалить</button></td>";
                     s += "</tr>";
+
+                    r += "<div class='modal fade' id='" + users[i].user.id + "' tabindex='-1' aria-labelledby='" + users[i].user.id + "Label' aria-hidden='true'>";
+
+                    r += "<div class='modal-dialog'>";
+                    r += "<div class='modal-content'>";
+                    r += "<div class='modal-header'>";
+                    r += "<h5 class='modal-title' id='" + users[i].user.id + "Label'>Удалить пользователя?</h5>";
+                    r += "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
+                    r += "</div>"
+                    r += "<div class='modal-body'>";
+                    r += "Вы действительно хотите удалить пользователя " + users[i].user.email + "?";
+                    r += "</div>"
+                    r += "<div class='modal-footer'>";
+                    r += "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Закрыть</button>";
+                    r += "<button type='button' onclick='removeUser(`" + users[i].user.id + "`)' class='btn btn-danger' data-bs-dismiss='modal'>Удалить</button>";
+                    r += "</div>"
+                    r += "</div>"
+                    r += "</div>"
+
+                    r += "</div>"
                 }
                 $("#users").html(s);
+                $("#removeUserModals").html(r);
             }
         });
     }
