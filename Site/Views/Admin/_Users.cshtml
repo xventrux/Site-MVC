@@ -65,8 +65,9 @@
 </div>
 
 <script>
-
-    updateUsers();
+    updateRolesToUsers();
+    var allRoles = [];
+    
 
     function saveRole(_id) {
         let elId = 'selectedRole' + _id;
@@ -94,20 +95,11 @@
         });
     }
 
-    function updateUsers() {
-        console.log('update');
-        let str = document.getElementById("searchField").value;
-
+    function updateRolesToUsers() {
         $.ajax({
             type: 'GET',
-            url: 'Admin/GetUsers',
-            data: { search: str },
-            success: function (model) {
-
-                var users = model.listOfUsers;
-                var roles = model.listOfRoles;
-
-                var s = "";
+            url: 'Admin/GetRoles/',
+            success: function (roles) {
                 var c = "";
 
                 for (let i = 0; i < roles.length; i++) {
@@ -115,8 +107,37 @@
                     c += "<input id='check-" + roles[i] + "' class='form-check-input' type='checkbox' value='' id='flexCheckChecked' checked>";
                     c += "<label class='form-check-label'>" + roles[i] + "</label>";
                     c += "</div>";
+                    allRoles[i] = roles[i];
                 }
                 $("#checkRoles").html(c);
+                updateUsers();
+            }
+        });
+    }
+
+    function updateUsers() {
+        let str = document.getElementById("searchField").value;
+        let checkRoles = [];
+        for (let i = 0; i < allRoles.length; i++) {
+            let id = 'check-' + allRoles[i];
+            let el = document.getElementById(id);
+
+            if (el.checked) {
+
+                checkRoles.push(allRoles[i]);
+            }
+        }
+
+        $.ajax({
+            type: 'GET',
+            url: 'Admin/GetUsers',
+            data: { search: str, _roles: checkRoles },
+            success: function (model) {
+
+                var users = model.listOfUsers;
+                var roles = model.listOfRoles;
+
+                var s = "";
                 
                 for (let i = 0; i < users.length; i++) {
                     s += "<tr>";

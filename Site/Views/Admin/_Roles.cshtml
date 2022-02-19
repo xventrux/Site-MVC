@@ -47,7 +47,7 @@
             data: { name: _name },
             success: function() {
                 updateRoles();
-                updateUsers();
+                updateRolesToUsers();
             }
         });
 
@@ -62,7 +62,7 @@
             data: { name: str },
             success: function () {
                 updateRoles();
-                updateUsers();
+                updateRolesToUsers();
                 roleName.value = "";
             }
         });
