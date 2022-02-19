@@ -8,7 +8,7 @@ namespace Site.ViewModels.Admin
 {
     public class UsersTableViewModel
     {
-        public List<UserViewModel> ListOfUsers { get; set; }
+        public List<User> ListOfUsers { get; set; }
 
         public List<string> ListOfRoles { get; set; }
     }

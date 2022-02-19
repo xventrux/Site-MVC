@@ -63,7 +63,7 @@ namespace Site.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers(string search, string[] _roles)
         {
-            List<UserViewModel> users = await SearchUsers(_userManager.Users, search, _roles);
+            List<User> users = await SearchUsers(_userManager.Users, search, _roles);
 
             List<string> roles = new List<string>();
 
@@ -78,28 +78,18 @@ namespace Site.Controllers
             return new JsonResult(new UsersTableViewModel { ListOfUsers = users, ListOfRoles = roles });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> RemoveUser(string id)
+        public async Task<List<User>> SearchUsers(IQueryable<User> users, string str, string[] roles)
         {
-            User u = _userManager.Users.Where(u => u.Id == id).FirstOrDefault();
-            if (u != null)
-                await _userManager.DeleteAsync(u);
-
-            return Ok();
-        }
-
-        public async Task<List<UserViewModel>> SearchUsers(IQueryable<User> users, string str, string[] roles)
-        {
-            List<UserViewModel> list = new List<UserViewModel>();
+            List<User> list = new List<User>();
 
             if (String.IsNullOrEmpty(str))
             {
-                list = await UserViewModel.CreateList(users.ToList(), _userManager);
+                list = users.ToList();
             }
 
             else
             {
-                list = await UserViewModel.CreateList(users.Where(u => u.Email.ToLower().Contains(str.ToLower()) || str.ToLower().Contains(u.Email.ToLower())).ToList(), _userManager);
+                list = users.Where(u => u.Email.ToLower().Contains(str.ToLower()) || str.ToLower().Contains(u.Email.ToLower())).ToList();
             }
 
             for(int i = 0; i < list.Count; i++)
@@ -108,7 +98,7 @@ namespace Site.Controllers
 
                 foreach (string item in roles)
                 {
-                    if(await _userManager.IsInRoleAsync(list[i].User, item))
+                    if(await _userManager.IsInRoleAsync(list[i], item))
                     {
                         cond = true;
                         break;
