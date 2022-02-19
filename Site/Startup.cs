@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Site.DataAccess;
 using Site.Infrastructure.Repository;
 using Site.Models.Entities;
+using Site.Services.EmailServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,7 @@ namespace Site
             // Регистрация сервиса для работы с Identity
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<BaseDbContext>().AddDefaultTokenProviders();
 
+            services.AddScoped<IEmailService, EmailService>();
 
             services.AddControllersWithViews();
         }
